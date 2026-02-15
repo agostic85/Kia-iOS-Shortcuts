@@ -31,7 +31,7 @@ if missing:
 # Vehicle Manager
 # =========================
 vehicle_manager = VehicleManager(
-    region=3,  # North America
+    region=1,  # Europe (Sweden)
     brand=1,   # KIA
     username=USERNAME,
     password=PASSWORD,
@@ -164,9 +164,13 @@ def start_climate():
         refresh_and_sync()
         vehicle_id = get_vehicle_id()
 
+        data = request.get_json(silent=True) or {}
+        temp = int(data.get("temp", 22))          # default 22°C
+        duration = int(data.get("duration", 10))  # default 10 min
+
         climate_options = ClimateRequestOptions(
-            set_temp=72,
-            duration=10
+            set_temp=temp,
+            duration=duration
         )
 
         result = vehicle_manager.start_climate(vehicle_id, climate_options)
